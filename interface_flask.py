@@ -8,6 +8,7 @@ from flask_socketio import SocketIO
 import queue
 from conscious_assistant import set_up_conscious_assistant, conscious_thinker, tear_down_conscious_assistant
 import cv2
+import re
 
 os.environ['AGENT_MANIFEST_FILE'] = 'registries/manifest.hocon'
 
@@ -37,27 +38,39 @@ def conscious_thinking_process():
             thoughts_to_emit = []
             speeches_to_emit = []
 
-            for line in thoughts.splitlines():
-                stripped = line.strip()
-                if stripped.startswith("thought:"):
-                    # Remove the 'thought:' prefix and strip whitespace
-                    content = stripped[len("thought:"):].strip()
-                    if content:
-                        timestamp = datetime.now().strftime("[%I:%M:%S%p]").lower()
-                        thoughts_to_emit.append(f"{timestamp} thought: {content}")
-                elif stripped.startswith("say:"):
-                    content = stripped[len("say:"):].strip()
-                    if content:
-                        speeches_to_emit.append(f"{content}")
+            # --- 1.  Slice the input into blocks ----------------------------------------
+            #     Each block begins with  "thought:"  or  "say:"  and continues until
+            #     the next block or the end of the string.
+            pattern = re.compile(
+                r'(?m)^(thought|say):[ \t]*(.*?)(?=^\s*(?:thought|say):|\Z)',  # look-ahead
+                re.S  # dot = newline
+            )
 
-            # If you want to default any leftover lines to 'thought', add an 'else' block if needed
+            for kind, raw in pattern.findall(thoughts):
+                content = raw.lstrip()  # drop the leading spaces/newline after the prefix
+                if not content:
+                    continue
 
-            # Emitting thoughts and speeches separately
+                if kind == "thought":
+                    timestamp = datetime.now().strftime("[%I:%M:%S%p]").lower()
+                    thoughts_to_emit.append(f"{timestamp} thought: {content}")
+                else:  # kind == "say"
+                    speeches_to_emit.append(content)
+
+            # --- 2.  Emit the blocks -----------------------------------------------------
             if thoughts_to_emit:
-                socketio.emit('update_thoughts',
-                              {'data': '\n'.join(thoughts_to_emit)}, namespace='/chat')
+                socketio.emit(
+                    "update_thoughts",
+                    {"data": "\n".join(thoughts_to_emit)},
+                    namespace="/chat",
+                )
+
             if speeches_to_emit:
-                socketio.emit('update_speech', {'data': '\n'.join(speeches_to_emit)}, namespace='/chat')
+                socketio.emit(
+                    "update_speech",
+                    {"data": "\n".join(speeches_to_emit)},
+                    namespace="/chat",
+                )
 
             timestamp = datetime.now().strftime("[%I:%M:%S%p]").lower()
             thoughts = f"\n{timestamp} user: " + "[Silence]"
