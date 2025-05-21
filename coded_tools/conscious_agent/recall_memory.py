@@ -1,11 +1,12 @@
-import logging
 from typing import Any
 from typing import Dict
+from typing import Union
+
+import logging
 
 from neuro_san.interfaces.coded_tool import CodedTool
 
 from coded_tools.kwik_agents.list_topics import MEMORY_DATA_STRUCTURE
-
 
 class RecallMemory(CodedTool):
     """
@@ -15,7 +16,7 @@ class RecallMemory(CodedTool):
     def __init__(self):
         self.topic_memory = None
 
-    def invoke(self, args: Dict[str, Any], sly_data: Dict[str, Any]) -> str:
+    def invoke(self, args: Dict[str, Any], sly_data: Dict[str, Any]) -> Union[Dict[str, Any], str]:
         """
         :param args: An argument dictionary whose keys are the parameters
                 to the coded tool and whose values are the values passed for them
@@ -60,13 +61,7 @@ class RecallMemory(CodedTool):
         logger.info(">>>>>>>>>>>>>>>>>>>DONE !!!>>>>>>>>>>>>>>>>>>")
         return the_memory_str
 
-    async def async_invoke(self, args: Dict[str, Any], sly_data: Dict[str, Any]) -> str:
-        """
-        Delegates to the synchronous invoke method for now.
-        """
-        return self.invoke(args, sly_data)
-
-    def recall_memory(self, topic: str) -> str:
+    def recall_memory(self, topic: str):
         """
         Recall all facts related to this topic from memory.
 
@@ -78,4 +73,5 @@ class RecallMemory(CodedTool):
         """
         if topic in self.topic_memory:
             return self.topic_memory[topic]
-        return "NO RELATED MEMORIES!"
+        else:
+            return "NO RELATED MEMORIES!"

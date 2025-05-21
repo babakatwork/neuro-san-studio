@@ -47,6 +47,8 @@ You can choose to use these recollections in responding to the user.
 With every entry from the user, see if there are any facts about the user or the world that you did not know before.
 Use your commit_to_memory tool to memorize all such facts. Each fact should be stored under a topic.
 These could be topics you've used before, or new ones, expanding the list of topics.
+If there are no new facts to add to memory, for example, if the user is simply asking a question, or when they are being silent,
+then make sure to call your reorganize_memory tool every once in a while.
             """,
             "allow": {
                 "to_upstream": {
@@ -55,7 +57,7 @@ These could be topics you've used before, or new ones, expanding the list of top
                     }
                 }
             },
-            "tools": ["commit_to_memory", "recall_memory", "list_topics"]
+            "tools": ["commit_to_memory", "recall_memory", "list_topics", "reorganize_memory"]
         },
         {
             "name": "commit_to_memory",
@@ -110,6 +112,38 @@ These could be topics you've used before, or new ones, expanding the list of top
                 }
             },
             "class": "list_topics.ListTopics"
+        },
+        {
+            "name": "reorganize_memory",
+            "function": {
+                "description": "I can derive new topics and facts from existing memory entries."
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "dialog_name": {
+                            "type": "string",
+                            "description": "A name for the current dialog."
+                        },
+                    },
+                }
+            },
+            "instructions": """
+{instructions_prefix}
+First, use your list_topics tool to retrieve the full list of topics for which we have stored memories.
+Then:
+ 1) for each topic, use your recall_memory tool to retrieve all memories associated with that topic.
+ 2) Review these memories and see if you can derive more facts from them, to store under existing or new topics.
+ Make sure the facts and topics are expressed in a concise manner. Topics should be general words or phrases.
+ Note that the new fact may be better stored under a new or different topic.
+ Also, note that the same fact already in memory may also belong under a different topic. It is ok to store the same fact under a new topic.
+ Try to be comprehensive on deriving new memories and facts and in the way you expand and reorganize your memory.
+ 3) Use your commit_to_memory tool to store each one of these newly derived facts into your memory.
+ Do not store redundant or overtly similar facts. Make sure each fact is expressing something different and new.
+ If not, don't add any new facts.
+Iterate on the above three steps until you've done a pass on all your topics and memories.
+            """,
+            "command": "Reorganize existing memory entries."
+            "tools": ["commit_to_memory", "recall_memory", "list_topics"]
         },
     ]
 }

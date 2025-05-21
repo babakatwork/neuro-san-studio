@@ -1,16 +1,14 @@
+from typing import Any
+from typing import Dict
+from typing import Union
+from datetime import datetime
 import json
 import logging
 import os
-from datetime import datetime
-from typing import Any
-from typing import Dict
 
 from neuro_san.interfaces.coded_tool import CodedTool
 
-from coded_tools.kwik_agents.list_topics import LONG_TERM_MEMORY_FILE
-from coded_tools.kwik_agents.list_topics import MEMORY_DATA_STRUCTURE
-from coded_tools.kwik_agents.list_topics import MEMORY_FILE_PATH
-
+from coded_tools.kwik_agents.list_topics import MEMORY_FILE_PATH, MEMORY_DATA_STRUCTURE, LONG_TERM_MEMORY_FILE
 
 class CommitToMemory(CodedTool):
     """
@@ -20,7 +18,7 @@ class CommitToMemory(CodedTool):
     def __init__(self):
         self.topic_memory = None
 
-    def invoke(self, args: Dict[str, Any], sly_data: Dict[str, Any]) -> str:
+    def invoke(self, args: Dict[str, Any], sly_data: Dict[str, Any]) -> Union[Dict[str, Any], str]:
         """
         :param args: An argument dictionary whose keys are the parameters
                 to the coded tool and whose values are the values passed for them
@@ -72,19 +70,13 @@ class CommitToMemory(CodedTool):
         logger.info(">>>>>>>>>>>>>>>>>>>DONE !!!>>>>>>>>>>>>>>>>>>")
         return the_memory_str
 
-    async def async_invoke(self, args: Dict[str, Any], sly_data: Dict[str, Any]) -> str:
-        """
-        Delegates to the synchronous invoke method for now.
-        """
-        return self.invoke(args, sly_data)
-
     def write_memory_to_file(self):
         """
         Writes the topic memory dictionary to a JSON file.
         """
         file_path = MEMORY_FILE_PATH + MEMORY_DATA_STRUCTURE + ".json"
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
-        with open(file_path, "w", encoding="utf-8") as file:
+        with open(file_path, 'w') as file:
             file.write(json.dumps(self.topic_memory, indent=2))
 
     def read_memory_from_file(self):
@@ -94,13 +86,13 @@ class CommitToMemory(CodedTool):
         """
         file_path = MEMORY_FILE_PATH + MEMORY_DATA_STRUCTURE + ".json"
         if os.path.exists(file_path):
-            with open(file_path, "r", encoding="utf-8") as file:
+            with open(file_path, 'r') as file:
                 content = file.read()
                 self.topic_memory = json.loads(content) if content else {}
         else:
             self.topic_memory = {}
 
-    def add_memory(self, topic: str, new_fact: str) -> str:
+    def add_memory(self, topic: str, new_fact: str):
         """
         Adds a new fact to memory and saves the memory dictionary to a JSON file.
 
