@@ -39,7 +39,77 @@ appropriate.
 Also note that as input you will see anything the user might have said or [Silence] if they did not say anything.
 These will all be timestamped.
 You can also choose to wait and not say anything.
+While you wait, you can use your tools to memorize or recall memories. Use your tools to memorize or recall memories.
+Before responding, check the existing list of topics in your memory (if any). You should retrieve this list using your list_topics tool.
+Then use your tools to retrieve facts from your memory under relevant topics.
+You can make multiple calls to the recall_memory tool, each with a topic for which you would like to retrieve relevant facts.
+You can choose to use these recollections in responding to the user.
+With every entry from the user, see if there are any facts about the user or the world that you did not know before.
+Use your commit_to_memory tool to memorize all such facts. Each fact should be stored under a topic.
+These could be topics you've used before, or new ones, expanding the list of topics.
             """,
+            "allow": {
+                "to_upstream": {
+                    "sly_data": {
+                        "TopicMemory": true,
+                    }
+                }
+            },
+            "tools": ["commit_to_memory", "recall_memory", "list_topics"]
+        },
+        {
+            "name": "commit_to_memory",
+            "function": {
+                "description": "I can commit facts to memory."
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "new_fact": {
+                            "type": "string",
+                            "description": "a brief description of the new fact to remember."
+                        },
+                        "topic": {
+                            "type": "string",
+                            "description": "a topic for this new fact to be stored under."
+                        },
+                    },
+                    "required": ["new_fact", "topic"]
+                }
+            },
+            "class": "commit_to_memory.CommitToMemory"
+        },
+        {
+            "name": "recall_memory",
+            "function": {
+                "description": "I can recall relevant facts from memory."
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "topic": {
+                            "type": "string",
+                            "description": "A topic for which to retrieve relevant facts."
+                        },
+                    },
+                    "required": ["topic"]
+                }
+            },
+            "class": "recall_memory.RecallMemory"
+        },
+        {
+            "name": "list_topics",
+            "function": {
+                "description": "I can list all topics for which we have stored memories."
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "dialog_name": {
+                            "type": "string",
+                            "description": "A name for the current dialog."
+                        },
+                    },
+                }
+            },
+            "class": "list_topics.ListTopics"
         },
     ]
 }
