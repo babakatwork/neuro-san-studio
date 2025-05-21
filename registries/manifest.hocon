@@ -38,6 +38,7 @@
     "pdf_rag.hocon": true,
     "agentic_rag.hocon": true,
     "kwik_agents.hocon": true,
+    "conscious_agent.hocon": true,
     # Before turn on and run the following agent network, make sure that:
     # The MCP server is running.
     # The server can be found at servers/MCP/bmi_server.py and run by command

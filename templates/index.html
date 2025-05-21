@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Conscious Thinking Assistant</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h2>Assistant:</h2>
+    <div id="assistant-speech"></div>
+    <h2>You:</h2>
+    <div id="user-input-display"></div>
+    <form id="user-input-section">
+        <textarea id="user-input" placeholder="Type a message... ('exit' to quit)"></textarea>
+        <button type="button" id="send-button" onclick="sendUserInput()">Send</button>
+    </form>
+    <button id="toggle-thoughts">Show/Hide Thoughts</button>
+    <h2>Assistant Thoughts:</h2>
+    <div id="assistant-thoughts" class="collapsed"></div>
+    <script>
+        var socket = io.connect('http://' + document.domain + ':' + location.port + '/chat');
+
+        socket.on('connect', function() {
+            console.log('Websocket connected!');
+        });
+
+        socket.on('update_thoughts', function(data) {
+            var element = document.getElementById('assistant-thoughts');
+            element.innerHTML += '<div>' + data.data.replace(/\n/g, '<br>') + '</div>';
+            element.scrollTop = element.scrollHeight; // Auto-scroll to the bottom
+        });
+
+        socket.on('update_speech', function(data) {
+            var element = document.getElementById('assistant-speech');
+            element.innerHTML += '<div>' + data.data.replace(/\n/g, '<br>') + '</div>';
+            element.scrollTop = element.scrollHeight; // Auto-scroll to the bottom
+        });
+
+        socket.on('update_user_input', function(data) {
+            var element = document.getElementById('user-input-display');
+            element.innerHTML += '<div>' + data.data.replace(/\n/g, '<br>') + '</div>';
+            element.scrollTop = element.scrollHeight; // Auto-scroll to the bottom
+        });
+
+        function sendUserInput() {
+            var userInput = document.getElementById('user-input').value.trim();
+            if (userInput) {
+                socket.emit('user_input', {data: userInput}, '/chat');
+                document.getElementById('user-input').value = ''; // Clear the input after sending
+            }
+        }
+
+        // Toggle visibility of assistant thoughts
+        document.getElementById('toggle-thoughts').addEventListener('click', function() {
+            var thoughtsDiv = document.getElementById('assistant-thoughts');
+            thoughtsDiv.classList.toggle('collapsed');
+        });
+        window.addEventListener('beforeunload', function (e) {
+            navigator.sendBeacon('/shutdown');
+        });
+    </script>
+</body>
+</html>
