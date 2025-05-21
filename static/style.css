@@ -1,125 +1,202 @@
-body, html {
-    line-height: 1.6;
-    font-family: 'Open Sans', Arial, sans-serif;
-    font-size: 16px;
-    background: linear-gradient(to right, #eef2f3, #f0f2f5);
+html, body {
     height: 100%;
     margin: 0;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    color: #333;
+    padding: 0;
+    background: linear-gradient(to right, #f2f6fc, #e9eafc);
+    font-family: 'Inter', 'Open Sans', Arial, sans-serif;
+    color: #232946;
+    min-height: 100vh;
 }
 
-#assistant-speech, #assistant-thoughts, #user-input-display {
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 5px 8px rgba(0, 0, 0, 0.15);
-    margin: 20px 0;
-    padding: 20px;
-    max-width: 800px; width: 100%;
-    min-width: 300px; /* Consider adding a min-width for smaller screens */
-    background-color: #fff;
-    overflow-y: auto;
-    max-height: 500px;
-    min_height: 500px;
-    margin-bottom: 30px;
-    flex-grow: 0; /* Prevents the box from growing larger than its content */
-    flex-shrink: 0; /* Prevents the box from shrinking too small */
-    flex-basis: auto; /* Adjusts the default size of the element before it grows or shrinks */
+.main-container {
+    max-width: 700px;
+    margin: 40px auto 20px auto;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 8px 32px 0 rgba(36, 50, 93, 0.14);
+    padding: 36px 28px 24px 28px;
+}
 
+header {
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2.2em;
+    font-weight: 600;
+    letter-spacing: -1px;
+    color: #3553ad;
+}
+
+.subtitle {
+    color: #667;
+    font-size: 1.08em;
+    margin-top: 7px;
+}
+
+section {
+    margin-bottom: 32px;
+}
+
+h2 {
+    color: #507be8;
+    margin-top: 0;
+    margin-bottom: 14px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+}
+
+.thoughts-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 4px;
+}
+
+#toggle-thoughts {
+    font-size: 1em;
+    color: #507be8;
+    background: #e4eafe;
+    border: none;
+    border-radius: 7px;
+    padding: 7px 14px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+#toggle-thoughts:hover, #toggle-thoughts:focus {
+    background: #c6d3ff;
+}
+
+.chat-box {
+    background: #f8faff;
+    border: 1px solid #dce3f0;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(56,56,105,0.09);
+    min-height: 60px;
+    max-height: 200px;
+    padding: 18px 15px;
+    margin-bottom: 12px;
+    overflow-y: auto;
+    font-size: 1.06em;
+    transition: background 0.2s;
+}
+
+.user-box {
+    background: #f0f7ef;
+}
+
+.speech-msg {
+    background: #e4eafe;
+    color: #233a66;
+    padding: 7px 12px;
+    border-radius: 8px;
+    margin-bottom: 7px;
+    max-width: 90%;
+}
+
+.user-msg {
+    background: #d3f8d3;
+    color: #246634;
+    padding: 7px 12px;
+    border-radius: 8px;
+    margin-bottom: 7px;
+    max-width: 90%;
+    margin-left: auto;
+}
+
+.thought-msg {
+    background: #fff3cd;
+    color: #98732c;
+    padding: 7px 12px;
+    border-radius: 8px;
+    margin-bottom: 7px;
+    max-width: 98%;
 }
 
 #assistant-thoughts.collapsed {
     display: none;
 }
 
-
 #user-input-section {
-    display: flex; /* Uses flexbox for layout */
-    flex-wrap: wrap; /* Allows items to wrap as needed */
-    gap: 10px; /* Adds space between textarea and button */
-    max-width: 800px;
-    width: 100%;
-    margin-top: 20px; /* Spacing from the previous content */
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+    align-items: flex-end;
+    flex-wrap: wrap;
 }
 
 textarea {
-    width: calc(100% - 22px); /* Adjust width to account for padding and border */
-    height: 100px; /* Fixed height with the ability to resize vertically */
-    max-height: 200px; /* Prevents it from becoming too tall */
-    resize: vertical; /* Allows the user to adjust the height */
-    border: 1px solid #ccc; /* Subtle border color */
-    border-radius: 5px; /* Rounded corners */
-    padding: 10px; /* Comfortable padding inside the textarea */
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); /* Inner shadow for depth */
-    outline: none; /* Removes the default focus outline */
-    transition: border-color 0.3s ease; /* Smooth transition for border color */
-    flex-grow: 1;
+    flex: 1;
+    min-height: 48px;
+    max-height: 140px;
+    padding: 10px 13px;
+    border: 1px solid #b8c0db;
+    border-radius: 8px;
+    font-size: 1em;
+    resize: vertical;
+    font-family: inherit;
+    outline: none;
+    background: #f8faff;
+    transition: border-color 0.2s;
 }
 
 textarea:focus {
-    border-color: #007bff; /* Highlight color on focus */
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 0 3px rgba(0, 123, 255, 0.25); /* Inner shadow and outer glow on focus */
-    flex-grow: 1;
+    border-color: #507be8;
 }
 
 #send-button {
-    padding: 10px 15px; /* Adequate padding for clickability */
-    font-weight: bold; /* Bold text for prominence */
-    background-color: #007bff; /* Primary button color */
-    color: #fff; /* Text color for contrast */
-    border: none; /* Removes the default border */
-    border-radius: 5px; /* Rounded corners for consistency with textarea */
-    cursor: pointer; /* Changes cursor to pointer to indicate clickability */
-    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease; /* Smooth transitions for visual feedback */
-    flex-shrink: 0; /* Prevents the button from shrinking */
-    white-space: nowrap; /* Keeps button text on one line */
-    width: auto; /* Auto width to content */
+    padding: 11px 24px;
+    font-weight: bold;
+    background: linear-gradient(90deg, #507be8 60%, #233a66 100%);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+    box-shadow: 0 2px 6px rgba(80,123,232,0.10);
 }
 
 #send-button:hover, #send-button:focus {
-    background-color: #0056b3; /* Darker shade on hover/focus for feedback */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Shadow for depth */
+    background: linear-gradient(90deg, #3553ad 70%, #3553ad 100%);
+    box-shadow: 0 4px 12px rgba(80,123,232,0.17);
+    transform: translateY(-1px) scale(1.04);
 }
 
-#send-button:active {
-    transform: translateY(1px); /* Slight push effect on click */
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); /* Less pronounced shadow on click */
+footer {
+    text-align: center;
+    margin: 40px 0 15px 0;
+    color: #aab2c8;
+    font-size: 0.99em;
+    letter-spacing: 0.01em;
 }
 
-.section-title {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 10px;
-    color: #333;
-}
-
-@media (max-width: 768px) {
-    body, html {
-        padding: 10px; /* Reduced padding on smaller screens */
+@media (max-width: 700px) {
+    .main-container {
+        padding: 16px 2vw 12px 2vw;
+        margin: 20px auto 10px auto;
     }
-
-    #assistant-speech, #assistant-thoughts, #user-input-display, #user-input-section {
-        max-width: 90%; /* Allows more margin on smaller screens for better readability */
-        min-width: 250px; /* Ensures boxes don't become too narrow */
-
+    .chat-box {
+        font-size: 0.97em;
+        padding: 12px 5px;
+        min-width: 0;
     }
-
-    textarea, #send-button {
-        font-size: 14px; /* Smaller font size for smaller screens */
+    h1 { font-size: 1.4em; }
+    h2 { font-size: 1.07em; }
+    #send-button {
+        padding: 9px 15px;
+        font-size: 0.95em;
     }
 }
 
-h2 {
-    color: #007bff; /* Accent color to draw attention to titles */
-    margin-top: 30px; /* Ensures ample space above section titles */
-    margin-bottom: 15px; /* Reduces space below titles to bring content closer */
-    font-weight: bold; /* Enhances visibility */
+::-webkit-scrollbar {
+    width: 8px;
+    background: #f2f6fc;
+    border-radius: 8px;
 }
-
-/* Additional spacing adjustments for better layout */
-#assistant-speech, #assistant-thoughts, #user-input-display {
-    margin-bottom: 30px; /* Increases spacing below each section for better separation */
+::-webkit-scrollbar-thumb {
+    background: #e4eafe;
+    border-radius: 8px;
 }
