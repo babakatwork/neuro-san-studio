@@ -11,7 +11,7 @@ import cv2
 import re
 
 os.environ['AGENT_MANIFEST_FILE'] = 'registries/manifest.hocon'
-
+os.environ['AGENT_TOOL_PATH'] = 'coded_tools'
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
 socketio = SocketIO(app)
