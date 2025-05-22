@@ -78,7 +78,7 @@ then make sure to call your reorganize_memory tool every once in a while.
                     "required": ["new_fact", "topic"]
                 }
             },
-            "class": "commit_to_memory.CommitToMemory"
+            "class": "kwik_agents.commit_to_memory.CommitToMemory"
         },
         {
             "name": "recall_memory",
@@ -95,7 +95,7 @@ then make sure to call your reorganize_memory tool every once in a while.
                     "required": ["topic"]
                 }
             },
-            "class": "recall_memory.RecallMemory"
+            "class": "kwik_agents.recall_memory.RecallMemory"
         },
         {
             "name": "list_topics",
@@ -111,7 +111,7 @@ then make sure to call your reorganize_memory tool every once in a while.
                     },
                 }
             },
-            "class": "list_topics.ListTopics"
+            "class": "kwik_agents.list_topics.ListTopics"
         },
         {
             "name": "reorganize_memory",
