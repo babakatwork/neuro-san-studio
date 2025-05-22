@@ -157,6 +157,11 @@ A number of examples that can be built using Neuro SAN:
       <td>Enables efficient, decentralized agent communication and task delegation using the A2A protocol.</td>
     </tr>
     <tr>
+      <td>🔄 <strong>Conscious Agent</strong></td>
+      <td>An example agent network that is run continuously via the conscious_assistant flask app.</td>
+      <td>This is an example of how to run agents continuously, initiating them from code, and how to make tool calls to non-default packages.</td>
+    </tr>
+    <tr>
       <td colspan="3"><strong>And Many More...</strong></td>
     </tr>
   </tbody>

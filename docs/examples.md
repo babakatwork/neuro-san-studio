@@ -80,3 +80,7 @@ to interact with a CRM system.
 
 [kwik_agents.md](examples/kwik_agents.md) is a basic multi-agent system with memory.
 
+## Conscious Agent
+
+[conscious_agent.md](examples/conscious_agent.md) is a basic multi-agent system with memory.
+
